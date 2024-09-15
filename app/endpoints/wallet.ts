@@ -1,0 +1,1 @@
+export const WALLETS = 'https://onchain.dextrading.com/valuable_wallets'

@@ -1,57 +1,47 @@
-"use client";
+import React from "react";
+type TabelType = {
+  walletData: Array<any>;
+  onSortToggle: () => void;
+  sortOrder: string;
+};
 
-const Table = ({ walletData }) => {
+const Table = ({ walletData, onSortToggle, sortOrder }: TabelType) => {
   return (
     <>
-      <table className="w-full">
-        <thead>
-          <tr>
-            <th>Wallet Address</th>
-            <th className="cursor-pointer flex gap-4 items-center">
-              <p>Net Profit</p>
-            </th>
-            <th>Winrate</th>
-          </tr>
-        </thead>
-        <tbody>
-          {walletData &&
-            walletData.length > 0 &&
-            walletData.map((wallet: any) => (
-              <tr key={wallet.walletAddress}>
-                <td className="flex items-center gap-4">
-                  <div className="bg-[#0c0c0f] p-1 rounded-md">
-                    {/* <Image
-                            src={"/dextrading-logo.svg"}
-                            width={24}
-                            height={24}
-                            alt="logo"
-                          /> */}
-                  </div>
-                  <a href={`/wallet/${wallet.walletAddress}`}>
+      <table className="w-full text-left border-collapse">
+        <>
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="py-4 px-6 border-b">Wallet Address</th>
+              <th
+                className="py-4 px-6 border-b cursor-pointer flex gap-4 items-center"
+                onClick={onSortToggle}
+              >
+                <p>Net Profit</p>
+                {sortOrder === "asc" ? (
+                  <span>&uarr;</span>
+                ) : (
+                  <span>&darr;</span>
+                )}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {walletData.map((wallet) => (
+              <tr key={wallet.walletAddress} className="hover:bg-gray-50">
+                <td className="py-4 px-6 border-b flex items-center gap-4">
+                  <a
+                    href={`/wallet/${wallet.walletAddress}`}
+                    className="text-blue-600 hover:underline"
+                  >
                     {wallet.walletAddress}
                   </a>
                 </td>
-                <td>{wallet.netProfit}</td>
-                <td
-                  className="text-sm"
-                  // style={{
-                  //   color:
-                  //     wallet.winRate <= 10
-                  //       ? COLORS.RED
-                  //       : wallet.winRate < 30
-                  //       ? COLORS.ORANGE
-                  //       : wallet.winRate < 50
-                  //       ? COLORS.YELLOW
-                  //       : wallet.winRate <= 100
-                  //       ? COLORS.GREEN
-                  //       : "white",
-                  // }}
-                >
-                  {wallet.winRate.toFixed(2)}%
-                </td>
+                <td className="py-4 px-6 border-b">{wallet.netProfit}</td>
               </tr>
             ))}
-        </tbody>
+          </tbody>
+        </>
       </table>
     </>
   );

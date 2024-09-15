@@ -1,54 +1,32 @@
 "use client";
-
-import { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
 import Table from "../shared/table";
-import axios from "axios";
-
-const SORT = {
-  ASC: "asc",
-  DEC: "desc",
-};
+import useWallets from "../hooks/useWallet";
+import Spinner from "../shared/loading";
+import Pagination from "../shared/pagination";
 
 const HomePage = () => {
-    const [wallets, setWallets] = useState([]);
-    const [page, setPage] = useState(1);
-    const [sortOrder, setSortOrder] = useState<string | undefined>();
-    const [loading, setLoading] = useState(true);
-  
-    const fetchWallets = useCallback(() => {
-      setLoading(true);
-      axios
-        .get("https://onchain.dextrading.com/valuable_wallets", {
-          params: {
-            network: "eth",
-            page: page,
-            limit: 5,
-            sortBy: sortOrder && "netProfit",
-            sortOrder,
-          },
-        })
-        .then((res: any) => {
-          setWallets(res.data);
-        })
-        .catch((err) => {
-          console.error(err);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }, [setWallets, page, sortOrder]);
-  
-    useEffect(() => {
-      fetchWallets();
-    }, [fetchWallets]);
-    console.log(wallets,'wallets')
+  const { wallets, loading, page, setPage, sortOrder, setSortOrder } =
+    useWallets();
+
+  const toggleSortOrder = () => {
+    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  };
+
   return (
-    <>
-      <div className="overflow-x-auto w-full">
-        <Table walletData={wallets} />
-      </div>
-    </>
+    <div className="overflow-x-auto w-full flex-col flex items-center h-[100vh] self-center justify-center p-10">
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          <Table
+            walletData={wallets}
+            onSortToggle={toggleSortOrder}
+            sortOrder={sortOrder}
+          />
+          <Pagination />
+        </>
+      )}
+    </div>
   );
 };
 
