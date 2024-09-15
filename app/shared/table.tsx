@@ -27,7 +27,7 @@ const Table = ({ walletData, onSortToggle, sortOrder }: TabelType) => {
             </tr>
           </thead>
           <tbody>
-            {walletData.map((wallet) => (
+            {walletData?.map((wallet) => (
               <tr key={wallet.walletAddress} className="hover:bg-gray-50">
                 <td className="py-4 px-6 border-b flex items-center gap-4">
                   <a

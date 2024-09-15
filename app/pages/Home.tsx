@@ -5,11 +5,23 @@ import Spinner from "../shared/loading";
 import Pagination from "../shared/pagination";
 
 const HomePage = () => {
-  const { wallets, loading, page, setPage, sortOrder, setSortOrder } =
-    useWallets();
+  const {
+    wallets,
+    loading,
+    page,
+    setPage,
+    sortOrder,
+    setSortOrder,
+    totalCount,
+    pageSize,
+  } = useWallets();
 
   const toggleSortOrder = () => {
     setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
   };
 
   return (
@@ -23,7 +35,12 @@ const HomePage = () => {
             onSortToggle={toggleSortOrder}
             sortOrder={sortOrder}
           />
-          <Pagination />
+          <Pagination
+            currentPage={page}
+            totalCount={totalCount}
+            pageSize={pageSize}
+            onPageChange={handlePageChange}
+          />
         </>
       )}
     </div>

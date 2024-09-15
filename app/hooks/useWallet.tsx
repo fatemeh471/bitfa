@@ -4,6 +4,8 @@ import axios from "axios";
 import { WALLETS } from "../endpoints/wallet";
 import { SORT } from "../constants/enums";
 
+const PAGE_SIZE = 5;
+const totalCount = 350;
 const useWallets = (initialPage = 1, initialSortOrder = SORT.ASC) => {
   const [wallets, setWallets] = useState([]);
   const [page, setPage] = useState(initialPage);
@@ -17,7 +19,7 @@ const useWallets = (initialPage = 1, initialSortOrder = SORT.ASC) => {
         params: {
           network: "eth",
           page: page,
-          limit: 5,
+          limit: PAGE_SIZE,
           sortBy: "netProfit",
           sortOrder: sortOrder,
         },
@@ -31,11 +33,11 @@ const useWallets = (initialPage = 1, initialSortOrder = SORT.ASC) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [page, setPage, sortOrder]);
+  }, [page, sortOrder]);
 
   useEffect(() => {
     fetchWallets();
-  }, [fetchWallets]);
+  }, [page, sortOrder]);
 
   return {
     wallets,
@@ -44,6 +46,8 @@ const useWallets = (initialPage = 1, initialSortOrder = SORT.ASC) => {
     setPage,
     sortOrder,
     setSortOrder,
+    totalCount, 
+    pageSize: PAGE_SIZE,
   };
 };
 
